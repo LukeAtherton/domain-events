@@ -32,5 +32,5 @@ type EventSource struct {
 }
 
 func BuildHeader(messageType string, sender *EventSource) (header *MessageHeader) {
-	return &MessageHeader{CorrelationId: NewSequentialUUID(), MessageType: messageType, Sender: sender, TimeStamp: time.Now().UTC()}
+	return &MessageHeader{CorrelationId: NewUUID(), MessageType: messageType, Sender: sender, TimeStamp: time.Now().UTC()}
 }

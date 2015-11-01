@@ -13,13 +13,6 @@ import (
 	// "strings"
 )
 
-func failOnError(err error, msg string) {
-	if err != nil {
-		log.Fatalf("%s: %s", msg, err)
-		panic(fmt.Sprintf("%s: %s", msg, err))
-	}
-}
-
 type ampqPublisher struct {
 	uri          string
 	exchangeName string

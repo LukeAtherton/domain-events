@@ -15,7 +15,6 @@ import (
 )
 
 type NsqListener struct {
-	repo                     Repo
 	handler                  DomainHandler
 	appName                  string
 	topic                    string
@@ -28,9 +27,9 @@ type NsqListener struct {
 	listenStart              time.Time
 }
 
-func NewMsgQListener(appName string, topic string, nsqLookupAddressHttp string, nsqNodeTcp string, repo Repo) *NsqListener {
+func NewMsgQListener(appName string, topic string, nsqLookupAddressHttp string, nsqNodeTcp string) *NsqListener {
 
-	return &NsqListener{appName: appName, repo: repo, handler: NewHandler(repo), topic: topic, nsqLookupAddressHttp: nsqLookupAddressHttp, nsqNodeTcp: nsqNodeTcp}
+	return &NsqListener{appName: appName, handler: NewHandler(), topic: topic, nsqLookupAddressHttp: nsqLookupAddressHttp, nsqNodeTcp: nsqNodeTcp}
 }
 
 func (listener *NsqListener) shouldPassMessage(jsonMsg *simplejson.Json) (bool, bool) {

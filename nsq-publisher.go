@@ -11,10 +11,6 @@ import (
 	"strings"
 )
 
-type Publisher interface {
-	PublishMessage(message DomainEvent) (err error)
-}
-
 type nsqHttpPublisher struct {
 	nsqdHttpAddress string
 }
