@@ -1,7 +1,7 @@
 package domain_events
 
 import (
-	. "github.com/lukeatherton/identity"
+	"github.com/satori/go.uuid"
 
 	"time"
 )
@@ -12,7 +12,7 @@ type DomainEvent interface {
 }
 
 type MessageHeader struct {
-	CorrelationId ID           `json:"c_id" xml:"c_id"`
+	CorrelationId uuid.UUID    `json:"c_id" xml:"c_id"`
 	MessageType   string       `json:"message_type" xml:"message_type"`
 	Sender        *EventSource `json:"sender" xml:"sender"`
 	TimeStamp     time.Time    `json:"timestamp" xml:"timestamp"`
@@ -28,9 +28,9 @@ func (h *MessageHeader) GetMessageType() (messageType string) {
 
 type EventSource struct {
 	Service string `json:"service" xml:"service"`
-	UserId  ID     `json:"user_id" xml:"user_id"`
+	UserId  string `json:"user_id" xml:"user_id"`
 }
 
 func BuildHeader(messageType string, sender *EventSource) (header *MessageHeader) {
-	return &MessageHeader{CorrelationId: NewUUID(), MessageType: messageType, Sender: sender, TimeStamp: time.Now().UTC()}
+	return &MessageHeader{CorrelationId: uuid.NewV4(), MessageType: messageType, Sender: sender, TimeStamp: time.Now().UTC()}
 }
