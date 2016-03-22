@@ -27,8 +27,8 @@ func (h *MessageHeader) GetMessageType() (messageType string) {
 }
 
 type EventSource struct {
-	Service string `json:"service" xml:"service"`
-	UserId  string `json:"user_id" xml:"user_id"`
+	Service string    `json:"service" xml:"service"`
+	UserId  uuid.UUID `json:"user_id" xml:"user_id"`
 }
 
 func BuildHeader(messageType string, sender *EventSource) (header *MessageHeader) {
