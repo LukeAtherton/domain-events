@@ -9,7 +9,11 @@ import (
 type DomainEvent interface {
 	GetMessageType() (messageType string)
 	GetHeader() (header *MessageHeader)
-	GetBody() (body *MessageBody)
+}
+
+type Event struct {
+	Header *MessageHeader `json:"header" xml:"header"`
+	Body   interface{}    `json:"body" xml:"body"`
 }
 
 type MessageHeader struct {
@@ -43,4 +47,8 @@ type EventSource struct {
 
 func BuildHeader(messageType string, source *EventSource) (header *MessageHeader) {
 	return &MessageHeader{CorrelationId: uuid.NewV4(), MessageType: messageType, Source: source, SentAt: time.Now().UTC()}
+}
+
+func BuildEvent(messageType string, source *EventSource, data interface{}) (event *Event) {
+	return &Event{Header: BuildHeader(messageType, source), Body: data}
 }
