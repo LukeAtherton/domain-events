@@ -9,6 +9,7 @@ import (
 type DomainEvent interface {
 	GetMessageType() (messageType string)
 	GetHeader() (header *MessageHeader)
+	GetBody() (body *MessageBody)
 }
 
 type MessageHeader struct {
@@ -24,6 +25,14 @@ func (h *MessageHeader) GetHeader() (header *MessageHeader) {
 
 func (h *MessageHeader) GetMessageType() (messageType string) {
 	return h.MessageType
+}
+
+type MessageBody struct {
+	Data interface{}
+}
+
+func (b *MessageBody) GetBody() (body interface{}) {
+	return b.Data
 }
 
 type EventSource struct {

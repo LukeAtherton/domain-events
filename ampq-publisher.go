@@ -4,6 +4,7 @@ import (
 	// "crypto/tls"
 	"encoding/json"
 	"fmt"
+
 	"github.com/streadway/amqp"
 	// "io/ioutil"
 	// "net/http"
@@ -97,6 +98,11 @@ func (publisher *ampqPublisher) PublishMessage(message DomainEvent) (err error) 
 			DeliveryMode:    amqp.Transient, // 1=non-persistent, 2=persistent
 			Priority:        0,              // 0-9
 			// a bunch of application/implementation-specific fields
+			CorrelationId: message.GetHeader().CorrelationId.String(),
+			Timestamp:     message.GetHeader().SentAt,
+			AppId:         message.GetHeader().Source.Service,
+			UserId:        message.GetHeader().Source.SenderId.String(),
+			Type:          message.GetHeader().Source.Trigger,
 		},
 	); err != nil {
 		return fmt.Errorf("Exchange Publish: %s", err)
