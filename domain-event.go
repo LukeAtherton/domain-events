@@ -12,8 +12,8 @@ type DomainEvent interface {
 }
 
 type Event struct {
-	Header *MessageHeader `json:"header" xml:"header"`
-	Body   interface{}    `json:"body" xml:"body"`
+	*MessageHeader `json:"header" xml:"header"`
+	Body           interface{} `json:"body" xml:"body"`
 }
 
 type MessageHeader struct {
@@ -50,5 +50,5 @@ func BuildHeader(messageType string, source *EventSource) (header *MessageHeader
 }
 
 func BuildEvent(messageType string, source *EventSource, data interface{}) (event *Event) {
-	return &Event{Header: BuildHeader(messageType, source), Body: data}
+	return &Event{MessageHeader: BuildHeader(messageType, source), Body: data}
 }
