@@ -41,6 +41,6 @@ func BuildHeader(messageType string, source *EventSource) (header *MessageHeader
 	return &MessageHeader{CorrelationId: uuid.NewV4(), MessageType: messageType, Source: source, SentAt: time.Now().UTC()}
 }
 
-func BuildEvent(messageType string, source *EventSource, data interface{}) (event *DomainEvent) {
-	return &DomainEvent{MessageHeader: BuildHeader(messageType, source), Body: data}
+func BuildEvent(messageType string, source *EventSource, data interface{}) (event DomainEvent) {
+	return DomainEvent{MessageHeader: BuildHeader(messageType, source), Body: data}
 }
