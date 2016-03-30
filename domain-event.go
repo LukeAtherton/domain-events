@@ -6,15 +6,15 @@ import (
 	"time"
 )
 
-type DomainEvent interface {
-	GetMessageType() (messageType string)
-	GetHeader() (header *MessageHeader)
-}
-
-type Event struct {
+type DomainEvent struct {
 	*MessageHeader `json:"header" xml:"header"`
 	Body           interface{} `json:"body" xml:"body"`
 }
+
+// type Event struct {
+// 	*MessageHeader `json:"header" xml:"header"`
+// 	Body           interface{} `json:"body" xml:"body"`
+// }
 
 type MessageHeader struct {
 	CorrelationId uuid.UUID    `json:"c_id" xml:"c_id"`
@@ -31,14 +31,6 @@ func (h *MessageHeader) GetMessageType() (messageType string) {
 	return h.MessageType
 }
 
-type MessageBody struct {
-	Data interface{}
-}
-
-func (b *MessageBody) GetBody() (body interface{}) {
-	return b.Data
-}
-
 type EventSource struct {
 	Service  string    `json:"service" xml:"service"`
 	Trigger  string    `json:"trigger" xml:"trigger"`
@@ -49,6 +41,6 @@ func BuildHeader(messageType string, source *EventSource) (header *MessageHeader
 	return &MessageHeader{CorrelationId: uuid.NewV4(), MessageType: messageType, Source: source, SentAt: time.Now().UTC()}
 }
 
-func BuildEvent(messageType string, source *EventSource, data interface{}) (event *Event) {
-	return &Event{MessageHeader: BuildHeader(messageType, source), Body: data}
+func BuildEvent(messageType string, source *EventSource, data interface{}) (event *DomainEvent) {
+	return &DomainEvent{MessageHeader: BuildHeader(messageType, source), Body: data}
 }
