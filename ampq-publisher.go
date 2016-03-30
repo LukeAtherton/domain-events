@@ -81,7 +81,7 @@ func (publisher *ampqPublisher) PublishMessage(message DomainEvent) (err error) 
 		defer confirmOne(ack, nack)
 	}
 
-	jsonData, _ := json.Marshal(message)
+	jsonData, _ := json.Marshal(message.Body)
 	// post_data := strings.NewReader((string)(jsonData))
 
 	log.Printf("declared Exchange, publishing %dB body (%q)", len(jsonData), jsonData)
