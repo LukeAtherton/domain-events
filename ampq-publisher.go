@@ -84,7 +84,7 @@ func (publisher *ampqPublisher) PublishMessage(message DomainEvent) (err error) 
 	jsonData, _ := json.Marshal(message.Body)
 	// post_data := strings.NewReader((string)(jsonData))
 
-	log.Printf("declared Exchange, publishing %dB body (%q)", len(jsonData), jsonData)
+	log.Printf("declared Exchange, %s @ %s publishing %s: %dB body (%q)", message.GetHeader().Source.Trigger, message.GetHeader().Source.Service, message.GetHeader().MessageType, len(jsonData), jsonData)
 	if err = channel.Publish(
 		publisher.exchangeName,          // publish to an exchange
 		message.GetHeader().MessageType, // routing to 0 or more queues
