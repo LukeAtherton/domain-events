@@ -51,6 +51,7 @@ func (publisher *ampqPublisher) PublishMessage(message DomainEvent) (err error) 
 	log.Printf("got Connection, getting Channel")
 	channel, err := connection.Channel()
 	failOnError(err, "Failed to open a channel")
+	defer channel.Close()
 	// if err != nil {
 	// 	return fmt.Errorf("Channel: %s", err)
 	// }
@@ -101,8 +102,8 @@ func (publisher *ampqPublisher) PublishMessage(message DomainEvent) (err error) 
 			CorrelationId: message.GetHeader().CorrelationId.String(),
 			Timestamp:     message.GetHeader().SentAt,
 			AppId:         message.GetHeader().Source.Service,
-			UserId:        message.GetHeader().Source.SenderId.String(),
-			Type:          message.GetHeader().Source.Trigger,
+			// UserId:        message.GetHeader().Source.SenderId.String(),
+			Type: message.GetHeader().Source.Trigger,
 		},
 	); err != nil {
 		return fmt.Errorf("Exchange Publish: %s", err)
@@ -110,61 +111,6 @@ func (publisher *ampqPublisher) PublishMessage(message DomainEvent) (err error) 
 
 	return nil
 }
-
-// func (publisher *rabbitMqPublisher) PublishMessage(message DomainMessage) (err error) {
-
-// 	apiUrl := fmt.Sprintf("http://%s", publisher.nsqdHttpAddress)
-// 	resource := "/put"
-
-// 	jsonData, _ := json.Marshal(message)
-
-// 	post_data := strings.NewReader((string)(jsonData))
-
-// 	u, _ := url.ParseRequestURI(apiUrl)
-// 	u.Path = resource
-
-// 	//set query params
-// 	q := u.Query()
-// 	q.Set("topic", "services")
-// 	u.RawQuery = q.Encode()
-
-// 	urlStr := fmt.Sprintf("%v", u)
-
-// 	tr := &http.Transport{
-// 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
-// 	}
-
-// 	client := &http.Client{Transport: tr}
-// 	req, _ := http.NewRequest("POST", urlStr, post_data) // <-- URL-encoded payload
-// 	req.Header.Add("Content-Type", "application/json")
-// 	req.Header.Add("Content-Length", strconv.Itoa(post_data.Len()))
-
-// 	fmt.Println("Publish to NSQ: ", urlStr)
-
-// 	resp, err := client.Do(req)
-
-// 	if err == nil {
-// 		fmt.Println(resp.Status)
-
-// 		switch resp.StatusCode {
-// 		case http.StatusOK:
-// 			return nil
-// 		case http.StatusCreated:
-// 			body, err := ioutil.ReadAll(resp.Body)
-// 			if err == nil {
-// 				fmt.Println(body)
-// 			} else {
-// 				panic(err)
-// 			}
-// 		default:
-// 			panic(err)
-// 		}
-// 	} else {
-// 		panic(err)
-// 	}
-
-// 	return nil
-// }
 
 // One would typically keep a channel of publishings, a sequence number, and a
 // set of unacknowledged sequence numbers and loop until the publishing channel
