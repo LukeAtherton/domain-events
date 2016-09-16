@@ -96,8 +96,8 @@ func (publisher *ampqPublisher) PublishMessage(message DomainEvent) (err error) 
 			ContentType:     "application/json",
 			ContentEncoding: "",
 			Body:            []byte(jsonData),
-			DeliveryMode:    amqp.Transient, // 1=non-persistent, 2=persistent
-			Priority:        0,              // 0-9
+			DeliveryMode:    amqp.Persistent, // 1=non-persistent, 2=persistent
+			Priority:        0,               // 0-9
 			// a bunch of application/implementation-specific fields
 			CorrelationId: message.GetHeader().CorrelationId.String(),
 			Timestamp:     message.GetHeader().SentAt,
