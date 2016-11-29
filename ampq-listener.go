@@ -18,8 +18,6 @@ type AmpqListener struct {
 }
 
 func NewAmpqListener(topic string, queue string, address string, username string, password string, handler DomainHandler) *AmpqListener {
-
-	// conn, err := amqp.Dial("amqp://guest:guest@localhost:5672/")
 	conn, err := amqp.Dial(fmt.Sprintf("amqp://%s:%s@%s/", username, password, address))
 	failOnError(err, "Failed to connect to RabbitMQ")
 
@@ -39,7 +37,7 @@ func NewAmpqListener(topic string, queue string, address string, username string
 
 	q, err := ch.QueueDeclare(
 		queue, // name
-		false, // durable
+		true,  // durable
 		false, // delete when usused
 		false, // exclusive
 		false, // no-wait
